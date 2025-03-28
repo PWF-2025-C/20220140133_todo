@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
 
 class Todo extends Model
 {
-    use HashFactory;
+    use HasFactory;
 
     protected $fillable = [
         'title',
