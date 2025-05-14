@@ -11,13 +11,21 @@
             {{-- Notifikasi Sukses / Gagal --}}
             @if (session('success'))
                 <div class="mb-4 text-green-600 dark:text-green-400">
-                    {{ session('success') }}
+                    <p x-data="{ show: true }" x-show="show" x-transition
+                        x-init="setTimeout(() => show = false, 5000)"
+                        class="text-sm text-green-600 dark:text-green-400">
+                            {{ session('success') }}
+                    </p>
                 </div>
             @endif
 
             @if (session('danger'))
                 <div class="mb-4 text-red-600 dark:text-red-400">
-                    {{ session('danger') }}
+                    <p x-data="{ show: true }" x-show="show" x-transition
+                        x-init="setTimeout(() => show = false, 5000)"
+                        class="text-sm text-red-600 dark:text-red-400">
+                            {{ session('danger') }}
+                    </p>
                 </div>
             @endif
 
@@ -34,6 +42,7 @@
                 <thead class="bg-gray-200 dark:bg-gray-700 uppercase text-xs font-semibold">
                     <tr>
                         <th class="px-4 py-2">Title</th>
+                        <th class="px-4 py-2">Category</th>
                         <th class="px-4 py-2">Status</th>
                         <th class="px-4 py-2">Action</th>
                     </tr>
@@ -46,6 +55,7 @@
                                     {{ $todo->title }}
                                 </a>
                             </td>
+                            <td class="px-4 py-2">{{ $todo->category->name ?? 'No Category' }}</td>
                             <td class="px-4 py-2">
                             @if (!$todo->is_complete)
                                 <span class="bg-blue-500 text-white px-2 py-1 rounded text-xs">

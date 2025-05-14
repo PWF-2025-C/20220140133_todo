@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Todo;
+use App\Models\Category;
 
 class TodoController extends Controller
 {
@@ -23,7 +24,8 @@ class TodoController extends Controller
 
     public function create()
     {
-        return view('todo.create');
+        $categories = Category::all();
+        return view('todo.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -35,6 +37,8 @@ class TodoController extends Controller
         $todo = Todo::create([
             'title' => ucfirst($request->title),
             'user_id' => Auth::id(),
+            'category_id' => $request->category_id,
+            'is_complete' => false,
         ]);
         return redirect()->route('todo.index')->with('success', 'Todo created successfully!');
     }
@@ -71,20 +75,29 @@ class TodoController extends Controller
 
     public function edit(Todo $todo)
     {
-        if (Auth::id() == $todo->user_id) {
-            return view('todo.edit', compact('todo'));
-        } else {
+        if (Auth::id() != $todo->user_id && !auth()->user()->is_admin) {
             return redirect()->route('todo.index')->with('danger', 'You are not authorized to edit this todo!');
-        }
+        } 
+
+        $categories = Category::all();
+        return view('todo.edit', compact('todo', 'categories'));
     }
 
     public function update(Request $request, Todo $todo){
+        if (Auth::id() != $todo->user_id && !auth()->user()->is_admin) {
+            return redirect()->route('todo.index')->with('danger', 'You are not authorized to edit this todo!');
+        } 
+
         $request->validate([
             'title' => 'required|max:255',
+            'category_id' => 'required|exists:categories,id',
         ]);
+
         $todo->update([
             'title' => ucfirst($request->title),
+            'category_id' => $request->category_id,
         ]);
+        
         return redirect()->route('todo.index')->
         with('success', 'Todo updated successfully!');
     }

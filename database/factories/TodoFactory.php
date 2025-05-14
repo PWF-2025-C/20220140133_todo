@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,6 +21,7 @@ class TodoFactory extends Factory
             'user_id' => rand(1, 100),
             'title' => ucwords(fake()->sentence()),
             'is_complete' => rand(0, 1),
+            'category_id' => Category::inRandomOrder()->first()?->id,
         ];
     }
 }

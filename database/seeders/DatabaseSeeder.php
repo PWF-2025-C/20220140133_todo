@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 
 use App\Models\User;
 use App\Models\Todo;
+use App\Models\Category;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -18,9 +19,16 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
+        \App\Models\Category::insert([
+            ['name' => 'Category A'],
+            ['name' => 'Category B'],
+            ['name' => 'Category C'],
+        ]);
+
+        User::firstOrCreate(
+        ['email' => 'admin@admin.com'],
+        [
             'name' => 'Admin',
-            'email' => 'admin@admin.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),

@@ -3,6 +3,7 @@
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -33,6 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/todo/{todo}', [TodoController::class, 'destroy'])->name('todo.destroy');
     Route::delete('/todo', [TodoController::class, 'destroyCompleted'])->name('todo.deleteallcompleted');
 
+    Route::resource('categories', CategoryController::class)->except(['show']);
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
